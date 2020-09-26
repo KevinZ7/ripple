@@ -40,12 +40,14 @@ def formatData():
 
     threshold = 0.2
     # output data
-    with open('output.tsv', 'w') as f:
+    with open('output.txt', 'w') as f:
         matrixLen = len(similarities)
         if (matrixLen > 0):
             for i in range(matrixLen):
+                # find the top n suggested friends
                 ind = np.argpartition(similarities[i], -numTopSuggestedFriends)[-numTopSuggestedFriends:]
                 
+                # output suggested friends into output file
                 f.write('{content}\n'.format(content=df.iloc[i]['content']))
                 for j in ind[ind != i]:
                     score = similarities[i][j]
