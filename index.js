@@ -5,7 +5,7 @@ const {Pool} = require('pg');
 const session = require('express-session');
 
 var pool = new Pool({
-  connectionString :  process.env.DATABASE_URL
+  connectionString :  'postgres://kev2kev123:root@localhost/postgres'
 })
 
 var app = express();
@@ -25,9 +25,48 @@ app.use(session({
 
 //section for all get post routes
 app.get('/',(req,res) =>  {
-  res.render('pages/index',{data:"hi"})
+  res.render('pages/home',{data:"hi"})
 })
 
+//post to either login as the user or get the users user name and store it as session
+app.post('/login',(req,res) => {
+  const {username} = req.body;
+
+  var selectUser = 'SELECT * FROM ripple.user WHERE userid = $1';
+  pool.query(selectUser,[username],(error,results) => {
+    if(error){
+      console.log("error");
+      res.status(401);
+    }
+    if(results.rows.length == 0){
+      var insertUser = 'INSERT INTO ripple.user VALUES ($1,$2)';
+      pool.query(insertUser,[username,13],(error,results) => {
+        if(error){
+          console.log("error inserting user");
+          res.status(401);
+        }
+
+        req.session.user= {
+          username: username
+        }
+
+        res.status(200).redirect('/friends');
+      })
+    }
+    else{
+      req.session.user = {
+        username:username
+      }
+
+      res.redirect('/friends');
+    }
+  })
+})
+
+//get route for the friends page
+app.get('/friends',(req,res) => {
+  res.render('pages/friends');
+})
 
 http.listen(PORT,() => console.log(`Listening on ${ PORT }`));
 
