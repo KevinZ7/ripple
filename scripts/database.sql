@@ -35,3 +35,5 @@ create table if not exists ripple.friend(
     userid2 text references ripple.user(userid) on delete cascade,
     accepted boolean
 );
+
+alter table if exists ripple.journal add category text;
