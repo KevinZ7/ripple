@@ -5,7 +5,7 @@ const {Pool} = require('pg');
 const session = require('express-session');
 
 var pool = new Pool({
-  connectionString :  process.env.DATABASE_URL
+  connectionString :  'postgres://postgres:root@localhost/postgres'
 })
 
 var app = express();
@@ -25,8 +25,13 @@ app.use(session({
 
 //section for all get post routes
 app.get('/',(req,res) =>  {
-  res.render('pages/index',{data:"hi"})
+  res.render('pages/index')
 })
+
+app.get('/homepage', (req,res)=>{
+  res.render('pages/homepage',{data:"hi"});
+})
+
 
 
 http.listen(PORT,() => console.log(`Listening on ${ PORT }`));
