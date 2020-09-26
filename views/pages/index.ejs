@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include ../partials/header.ejs %>
+</head>
+
+<body>
+
+  <% data.forEach(function(r) { %>
+    <li><%= r.userid %></li>
+    <li><%= r.age %></li>
+  <% }); %>
+
+
+</body>
+</html>
