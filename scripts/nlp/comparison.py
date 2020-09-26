@@ -7,16 +7,6 @@ from nltk.corpus import stopwords
 from nltk.stem.snowball import SnowballStemmer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-# install nltk packages
-try:
-    nltk.data.find('tokenizers/punkt')
-except LookupError:
-    nltk.download('punkt')
-try:
-    nltk.data.find('corpora/stopwords')
-except LookupError:
-    nltk.download('stopwords')
-
 def formatData():
     df = pd.read_csv('raw_data.tsv', sep='\t')
 
@@ -44,28 +34,34 @@ def formatData():
     similarities = cosine_similarity(featureVectors)
     print(similarities)
 
-    threshold = 0.18
-    similarPairs = []
+    numTopSuggestedFriends = 3
+    # to account for the person themselves
+    numTopSuggestedFriends += 1
 
-    matrixLen = len(similarities)
-    if (matrixLen > 0):
-        for i in range(matrixLen):
-            for j in range(matrixLen):
-                if i < j and similarities[i][j] > threshold:
-                    similarPairs.append((i, j))
-
-    groups = make_equiv_classes(similarPairs)
-    print(groups)
-
+    threshold = 0.2
     # output data
-    df.to_csv('output.tsv', sep='\t')
+    with open('output.tsv', 'w') as f:
+        matrixLen = len(similarities)
+        if (matrixLen > 0):
+            for i in range(matrixLen):
+                ind = np.argpartition(similarities[i], -numTopSuggestedFriends)[-numTopSuggestedFriends:]
+                
+                f.write('{content}\n'.format(content=df.iloc[i]['content']))
+                for j in ind[ind != i]:
+                    score = similarities[i][j]
+                    if score >= threshold:
+                        f.write('{score} | {content}'.format(score=similarities[i][j], content=df.iloc[j]['content']))
+                f.write('\n\n')
+        f.close()         
 
-def make_equiv_classes(pairs):
-    groups = {}
-    for (x, y) in pairs:
-        xset = groups.get(x, set([x]))
-        yset = groups.get(y, set([y]))
-        jset = xset | yset
-        for z in jset:
-            groups[z] = jset
-    return set(map(tuple, groups.values()))
+if __name__ == '__main__':
+    # install nltk packages
+    try:
+        nltk.data.find('tokenizers/punkt')
+    except LookupError:
+        nltk.download('punkt')
+    try:
+        nltk.data.find('corpora/stopwords')
+    except LookupError:
+        nltk.download('stopwords')
+    formatData()
