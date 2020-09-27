@@ -5,7 +5,7 @@ const {Pool} = require('pg');
 const session = require('express-session');
 
 var pool = new Pool({
-  connectionString :  process.env.DATABASE_URL
+  connectionString :  'postgres://postgres:root@localhost/postgres'
 })
 
 var app = express();
@@ -26,6 +26,25 @@ app.use(session({
 //section for all get post routes
 app.get('/',(req,res) =>  {
   res.render('pages/index',{data:"hi"})
+})
+
+// Route to go to user's journal
+app.get('/journal', (req, res) => {
+  var user = 'johnsmith';
+
+  var query = `SELECT * FROM ripple.journal WHERE userid = '${user}' ORDER BY dt`;
+  pool.query(query, (error, result) => {
+    if(error){
+      console.log(error);
+      res.status(400);
+    }
+
+    var totalrows = result.rows.length;
+    console.log(result.rows[0])
+  
+    res.render('pages/journal',{rows: result.rows, size: totalrows});
+
+  })
 })
 
 
