@@ -2,7 +2,7 @@
 
 function sub_handle(){
     var content = document.getElementById("message").value;
-    console.log("clicked");
+    $('#load_spinner').css('display', 'inline-block');
     $.ajax('/add_mess', {
         type: 'POST',  // http method
         data: { message: content},  // data to submit
@@ -12,11 +12,19 @@ function sub_handle(){
                 type: 'GET',
                 success: function (res, err){
                     console.log(res.friends)
-                    $('#potentialfriends').append('<ol>')
-                    res.friends.split(',').forEach(friend => 
-                        $('#potentialfriends').append(`<li>${friend}</li>`)
+                    res.friends.forEach((friend, i) => 
+                        $('#friendslist').append(`
+                        <li>
+                            <h2>${i + 1}</h2>
+                            <h3>${friend.userid}</h3>
+                            <p>
+                            ${friend.content}
+                            </p>
+                            <button>Add Friend</button>
+                        </li>`)
                     );
-                    $('#potentialfriends').append('</ol>')
+                    $('#potentialfriends').css('display', 'block');
+                    $('#load_spinner').css('display', 'none');
                 }
             })
         },
