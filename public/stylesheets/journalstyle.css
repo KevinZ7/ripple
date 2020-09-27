@@ -14,7 +14,78 @@ p{
 body{
     background-color: khaki;
 }
-img{
-    background: transparent;
+textarea {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
+.btn {
+    background-color: darkslateblue;
+}
+#top {
+    border-radius: 10px; /* Rounded corners */
+  }
+
+.descriptor {
+position: relative;
+background: lightgrey;
+border-radius: .4em;
+}
+
+.descriptor:after{
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	width: 0;
+	height: 0;
+	border: 68px solid transparent;
+	border-right-color:lightgrey;
+	border-left: 0;
+	border-bottom: 0;
+	margin-top: -34px;
+	margin-left: -68px;
+}
+.messages {
+    position: relative;
+    background-color: yellow;
+    text-align: center;
+    max-width: 100%;
+  }
+  
+  .messages::before {
+
+    position : absolute;
+    z-index  : -1;
+    bottom   : 15px;
+    right    : 5px;
+    width    : 50%;
+    top      : 80%;
+    max-width: 200px;
+  
+    box-shadow: 0px 13px 10px black;
+    transform: rotate(4deg);
+  }
+
+  cite {
+    font-family: cursive;
+
+  }
+  hr.class-6 { 
+    background-color: #fff; 
+    border-top: 5px dotted #8c8b8b; 
+} 
+#background {
+    top: 0;
+    left: 0;
+    bottom: 0;;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://i.pinimg.com/originals/2e/77/9d/2e779df50b8b66c0d04255d31782fbfa.png');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100%;
+    opacity: 0.8;
+    filter:alpha(opacity=80);
+}
