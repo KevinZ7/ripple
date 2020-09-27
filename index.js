@@ -1,4 +1,5 @@
 const express = require('express')
+const {spawn} = require('child_process');
 const path = require('path')
 const PORT = process.env.PORT || 5000
 const {Pool} = require('pg');
@@ -51,7 +52,19 @@ app.get('/homepage', (req,res)=>{
   res.render('pages/homepage',{data:"hi"});
 })
 
-
+app.get('/potentialfriends', (req, res) => {
+  let username = req.query.username;
+  let dataToSend;
+  const python = spawn('python', ['scripts/nlp/comparison.py', '-u', username]);
+  python.stdout.on('data', (data) => {
+    console.log('Pipe data from python script ...');
+    dataToSend = data.toString();
+  });
+  python.on('close', (code) => {
+    console.log(`child process close all stdio with code ${code}`);
+    // send data to browser
+    res.send(dataToSend)
+  });
+})
 
 http.listen(PORT,() => console.log(`Listening on ${ PORT }`));
-
