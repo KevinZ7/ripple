@@ -75,7 +75,7 @@ def formatData(args, df):
 
     # compute cosine similarity
     similarities = cosine_similarity(featureVectors)
-    
+
     # to account for the person themselves
     NUM_TOP_SUGGESTED_FRIENDS = 3
     NUM_TOP_SUGGESTED_FRIENDS += 1
@@ -86,7 +86,9 @@ def formatData(args, df):
     # remove the original user
     indicies = indicies[indicies != index]
     
-    print(df.iloc[indicies].userid.tolist())
+    potentialFriends = df.iloc[indicies].userid.tolist()
+
+    print(','.join(potentialFriends))
 
 
 # install nltk packages

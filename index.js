@@ -6,7 +6,7 @@ const {Pool} = require('pg');
 const session = require('express-session');
 
 var pool = new Pool({
-  connectionString :  'postgres://postgres:root@localhost/postgres'
+  connectionString :  'postgres://fliang@localhost/ripple'
 })
 
 
@@ -57,7 +57,7 @@ app.post('/add_mess', (req,res)=>{
   var content = req.body.message;
   console.log(content);
   // var username = req.session.user.username;
-  var username = 'abhopla';
+  var username = 'Lily_693';
   var category = 'description';
 
 
@@ -79,23 +79,27 @@ app.post('/add_mess', (req,res)=>{
       if (error){ console.log(error);return res.status(409).send(error);}
 
       console.log("success!");
-      res.sendStatus(200);
+      res.send({userid: username});
     })
 
   })
 })
+
 app.get('/potentialfriends', (req, res) => {
-  let username = req.query.username;
+  let username = 'Lily_693';
   let dataToSend;
   const python = spawn('python', ['scripts/nlp/comparison.py', '-u', username]);
+  console.log(username)
   python.stdout.on('data', (data) => {
     console.log('Pipe data from python script ...');
     dataToSend = data.toString();
+    console.log(dataToSend)
   });
   python.on('close', (code) => {
     console.log(`child process close all stdio with code ${code}`);
     // send data to browser
-    res.send(dataToSend)
+    console.log(dataToSend)
+    res.send({friends: dataToSend})
   });
 })
 
