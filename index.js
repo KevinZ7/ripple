@@ -6,7 +6,7 @@ const {Pool} = require('pg');
 const session = require('express-session');
 
 var pool = new Pool({
-  connectionString :  'postgres://postgres:root@localhost/postgres'
+  connectionString :  'postgres://fliang@localhost/ripple'
 })
 
 
