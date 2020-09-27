@@ -4,12 +4,13 @@ create table if not exists ripple.user (
     age int
 );
 create table if not exists ripple.description (
-    descid text primary key,
+    descid SERIAL primary key,
     content text,
     descencoding text,
     dt timestamp,
     userid text references ripple.user(userid) on delete cascade
 );
+
 create table if not exists ripple.quote (
     quoteid text primary key,
     quote text,
@@ -35,3 +36,5 @@ create table if not exists ripple.friend(
     userid2 text references ripple.user(userid) on delete cascade,
     accepted boolean
 );
+
+alter table if exists ripple.journal add category text;

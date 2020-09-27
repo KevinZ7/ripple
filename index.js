@@ -25,7 +25,7 @@ app.use(session({
 
 //section for all get post routes
 app.get('/',(req,res) =>  {
-  res.render('pages/index',{data:"hi"})
+  res.render('pages/index')
 })
 
 // Route to go to user's journal
@@ -46,6 +46,11 @@ app.get('/journal', (req, res) => {
 
   })
 })
+
+app.get('/homepage', (req,res)=>{
+  res.render('pages/homepage',{data:"hi"});
+})
+
 
 
 http.listen(PORT,() => console.log(`Listening on ${ PORT }`));
