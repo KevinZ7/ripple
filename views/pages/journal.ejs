@@ -6,27 +6,56 @@
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
       <link rel='stylesheet' href='/stylesheets/journalstyle.css'>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+      <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
   </head>
 
   <body>
+    <% var today = new Date(); var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate(); %>
+
+    <div id="modal-entry" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+ 
+          <form id="journalentry">
+          <div class="form-group" style="text-align: center;">
+            <label for="journal"><b>Today: <%= today.toDateString() %></b>
+            </label>
+            <textarea id = "userinput" class="form-control" rows="10" name="entry" style="width: 80%; text-align: center; overflow: scroll;" ></textarea>
+            <button id= "entryform" class="btn btn-secondary" data-dismiss="modal">Submit</button>
+          </div>
+        </form>
+ 
+        <button class="btn btn-primary" id="top" style="background-color: darkslateblue;bottom: 15px;left: 15px;">Back to Top</button>
+        </div>
+      </div>
+    </div> 
+
+    <%- include('../partials/navbar.ejs')%>
+
+    <div id="background">
     <div id="topofpage"></div>
-
-    <h1>Ripple</h1>
-    <h3>Journal</h3>
-
 <br><br>
 
-    <% var today = new Date(); var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate(); %>
+
 
     <div class="container" style="text-align: center;">
 
       <div id="0" class="jumbotron pages" style="margin-left: auto; margin-right: auto;">
 
-        <% if(data[0][0].since.toDateString() == today.toDateString()){ %>
-        <h4 id="todaydate" class="display-4">Today: <%= today.toDateString() %></h4>
+        <% if(size ==0 ){ %>
+          <h4 id="todaydate" class="display-4" style="text-decoration: underline;"> <%= username %>'s Journal <br>  Today: <%= today.toDateString() %></h4>
       
-        <hr class="my-4">
+          <hr class="class-6">
+          <p id="page0text">You have not entered en entry or bookmarked on this day!</p>
+
+          <button style="margin-left: auto; margin-right: auto;" type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Add Journal Entry</button>
+        <% }
+
+          else{
+        if(data[0][0].since.toDateString() == today.toDateString()){ %>
+        <h4 id="todaydate" class="display-4" style="text-decoration: underline;"> <%= username %>'s Journal <br>  Today: <%= today.toDateString() %></h4>
+      
+        <hr class="class-6">
 
         <% data[0].forEach(function(entry, i){ 
           if(entry.category == "description"){ %>
@@ -40,11 +69,12 @@
            else if(entry.category == "quote"){ %>
 
             <blockquote class="blockquote text-center">
-              <cite class="blockquote-footer">"<%= entry.journal %>"</cite>
+              <cite class="blockquote-footer" style="size: 50%;" >"<%= entry.journal %>"</cite>
             </blockquote>
         <% } 
             
           else if(entry.category == "message"){ %>
+            <font size="5">A Message You Loved</font>
             <div class="messages">
               <%= entry.journal %>
             </div>
@@ -52,41 +82,32 @@
           <%}
         else{ %>
         
-          <p id="todayjournal"><%= entry.journal %></p>
+          <p id="todayjournal"><font size="5"> Journal Entry #<%= data[0].length -i %> </font><br><br><%= entry.journal %></p>
 
-          <% }
-          }) 
-        }
+          <% } %>
+          <hr>
+         <% }) %>
+         <button style="margin-left: auto; margin-right: auto;" type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Add Journal Entry</button>
+       <% }
+
         else{ %>
-        <p id="page0text">You have not entered en entry or bookmarked on this day!</p>
+          <h4 id="todaydate" class="display-4" style="text-decoration: underline;"> <%= username %>'s Journal <br>  Today: <%= today.toDateString() %></h4>
+      
+          <hr class="class-6">
+          <p id="page0text">You have not entered en entry or bookmarked on this day!</p>
+
+          <button style="margin-left: auto; margin-right: auto;" type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Add Journal Entry</button>
         <% } %>
-
-        <button style="margin-left: auto; margin-right: auto;" type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Add Journal Entry</button>
-
-        <div id="modal-entry" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-     
-              <form id="journalentry">
-              <div class="form-group" style="text-align: center;">
-                <label for="journal"><b>Today: <%= today.toDateString() %></b>
-                </label>
-                <textarea id = "userinput" class="form-control" rows="10" name="entry" style="width: 80%; text-align: center; overflow: scroll;" ></textarea>
-                <button id= "entryform" class="btn btn-secondary" data-dismiss="modal">Submit</button>
-              </div>
-            </form>
-     
-            <button class="btn btn-primary" id="top" style="background-color: darkslateblue;bottom: 15px;left: 15px;">Back to Top</button>
-            </div>
-          </div>
-        </div>     
       
 
-        <% if (size !=0 && size > 1){ %>
+        <% }
+
+        
+        
+        if (size !=0 && size > 1){ %>
         <button style="float: left;" class="btn btn-primary back" type="button" data-next="1" data-current= "0"> Previous Page</button>
             <% } %>
             <button onclick="scrolltotop()" class="btn btn-primary" id="top" style="background-color: darkslateblue;width: 100%;">Back to Top</button>
-
       </div>
     </div>
 
@@ -98,9 +119,9 @@
 
       <div id=<%=j %> class="jumbotron pages" style="margin-left: auto; margin-right: auto;">
 
-        <h4 class="display-4"><%= data[j][0].since.toDateString() %></h4>
+        <h4 class="display-4" style="text-decoration: underline;"> <%= username %>'s Journal <br> <%= data[j][0].since.toDateString() %></h4>
       
-        <hr class="my-4">
+        <hr class="class-6">
 
         <% data[j].forEach(function(page, i){ 
 
@@ -118,8 +139,9 @@
               <cite class="blockquote-footer">"<%= page.journal %>"</cite>
             </blockquote>
           <% } 
-          
+
           else if(entry.category == "message"){ %>
+            <font size="5">A Message You Loved</font>
             <div class="messages">
               <%= entry.journal %>
             </div>
@@ -129,9 +151,9 @@
         else{ %>
         
           <p id=<%=j%>><%= page.journal %></p>
-
-          <% }
-          }) 
+          <% } %>
+          <hr>
+         <% }) 
 
           if (data[j+1]){ %>
         <button style="float: left;" class="btn btn-primary back" type="button" data-next="<%= j+1 %>" data-current=<%=j %>> Previous Page</button>
@@ -140,12 +162,9 @@
         if (data[j-1]){ %>
         <button style="float: right;" class="btn btn-primary forward" type="button" data-back="<%= j-1 %>" data-current=<%= j %>> Next Page</button>
           <% } %>
-          <button onclick="scrolltotop()" class="btn btn-primary" id="top" style="background-color: darkslateblue;">Back to Top</button>
+          <button onclick="scrolltotop()" class="btn btn-primary" id="top" style="background-color: darkslateblue; width: 100%;">Back to Top</button>
       </div>
     <% }; %>
-
-
-
 
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
@@ -174,9 +193,11 @@
           scrollTop: $('#topofpage').offset().top
       }, 1000);
       };
-                  
+      
+      
         $(document).ready(function() { 
-          
+          $(this).scrollTop(0)
+    
           var numpages= document.getElementsByClassName('jumbotron').length
           console.log(numpages)
           var start = 0;
@@ -204,7 +225,6 @@
 
         e.preventDefault();
         var entry = $('#userinput').val()
-        var currpage = $()
 
         $.ajax({
             url: "/entry",
@@ -213,7 +233,6 @@
 
             success: function(data){
                 $("#page0text").append(entry)
-                $(".jumbotron-fluid").remove()
                 location.reload()
 
             }
@@ -223,7 +242,7 @@
   });
 
         
-
-  
         </script>
+          </div>
+
   </body>
