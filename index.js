@@ -357,8 +357,8 @@ app.post('/add_mess', (req,res)=>{
 app.post('/insert_quote', (req,res)=>{
     var author = req.body.author;
     var quote = req.body.quote;
-    // var username = req.session.user.username;
-    var username = 'abhopla';
+    var username = req.session.user.username;
+    // var username = 'abhopla';
 
     console.log(author);
     console.log(quote);
@@ -378,19 +378,24 @@ app.post('/insert_quote', (req,res)=>{
 app.get('/potentialfriends', (req, res) => {
   let username = 'Lily_236';
   let dataToSend;
-  const python = spawn('python', ['scripts/nlp/comparison.py', '-u', username]);
+  const python = spawn('python3', ['scripts/nlp/comparison.py', '-u', username]);
   console.log(username)
   python.stdout.on('data', (data) => {
     console.log('Pipe data from python script ...');
     dataToSend = data.toString();
     console.log(dataToSend)
   });
+
+  console.log("finished output")
+
   python.on('close', (code) => {
     console.log(`child process close all stdio with code ${code}`);
     // send data to browser
     console.log(JSON.parse(dataToSend))
     res.send({friends: JSON.parse(dataToSend)})
   });
+
+
 })
 
 http.listen(PORT,() => console.log(`Listening on ${ PORT }`));
