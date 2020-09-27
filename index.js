@@ -28,6 +28,25 @@ app.get('/',(req,res) =>  {
   res.render('pages/index')
 })
 
+// Route to go to user's journal
+app.get('/journal', (req, res) => {
+  var user = 'johnsmith';
+
+  var query = `SELECT * FROM ripple.journal WHERE userid = '${user}' ORDER BY dt`;
+  pool.query(query, (error, result) => {
+    if(error){
+      console.log(error);
+      res.status(400);
+    }
+
+    var totalrows = result.rows.length;
+    console.log(result.rows[0])
+  
+    res.render('pages/journal',{rows: result.rows, size: totalrows});
+
+  })
+})
+
 app.get('/homepage', (req,res)=>{
   res.render('pages/homepage',{data:"hi"});
 })
