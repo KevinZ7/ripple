@@ -15,7 +15,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 DATABASE_URL = 'localhost'
 PORT = 5000
 DATABASE = 'postgres'
-USER = 'postgres'
+USER = 'kev2kev123'
 PASSWORD = 'root'
 
 def myArgsParse():

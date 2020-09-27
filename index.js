@@ -52,7 +52,7 @@ app.post('/login',(req,res) => {
           username: username
         }
 
-        res.status(200).redirect('/friends');
+        res.status(200).redirect('/homepage');
       })
     }
     else{
@@ -60,7 +60,7 @@ app.post('/login',(req,res) => {
         username:username
       }
 
-      res.redirect('/friends');
+      res.redirect('/homepage');
     }
   })
 })
