@@ -263,21 +263,59 @@ app.post('/declineFriend',(req,res) => {
 
 // Route to go to user's journal
 app.get('/journal', (req, res) => {
-  var user = 'johnsmith';
+  var user = 'john';
 
-  var query = `SELECT * FROM ripple.journal WHERE userid = '${user}' ORDER BY dt`;
+
+  var query = `SELECT journal.journal, journal.since, journal.category, quote.author FROM ripple.journal LEFT JOIN ripple.quote
+  ON journal.userid = quote.userid WHERE journal.userid = '${user}' ORDER BY since DESC`;
+
+
+
   pool.query(query, (error, result) => {
     if(error){
       console.log(error);
       res.status(400);
     }
 
-    var totalrows = result.rows.length;
-    console.log(result.rows[0])
-  
-    res.render('pages/journal',{rows: result.rows, size: totalrows});
+
+
+    const entrydate = result.rows.reduce((acc, value) => {
+      if (acc.length && acc[acc.length - 1][0].since.toDateString() == value.since.toDateString()) {
+        acc[acc.length - 1].push(value);
+      } else {
+        acc.push([value]);
+      }
+    
+      return acc;
+    }, []);
+
+    var totalrows = entrydate.length;
+
+    console.log(entrydate)
+
+
+    res.render('pages/journal',{data: entrydate, size: totalrows, username: user});
 
   })
+})
+
+app.post('/entry', (req,res) =>{
+  var text = req.body.content;
+  var user = 'john';
+
+  console.log(text)
+
+  var query = `INSERT INTO ripple.journal VALUES (DEFAULT, $1, NOW()::TIMESTAMP, 'journal', $2)`
+
+  pool.query(query, [text, user], (error, result) => {
+    if(error){
+      console.log(error);
+      res.status(400)
+    }
+  
+    res.send({entry: text})
+  })
+
 })
 
 app.get('/homepage', (req,res)=>{

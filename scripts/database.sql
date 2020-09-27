@@ -1,5 +1,4 @@
 create schema if not exists ripple;
-
 drop table if exists ripple.friend;
 drop table if exists ripple.message;
 drop table if exists ripple.journal;
@@ -7,7 +6,6 @@ drop table if exists ripple.quote;
 drop table if exists ripple.description;
 drop table if exists ripple.user;
 drop table if exists ripple.recentmsg;
-
 create table if not exists ripple.user (
     userid text primary key,
     age int not null
@@ -19,7 +17,6 @@ create table if not exists ripple.description (
     userid text references ripple.user(userid) on delete cascade,
     unique (userid)
 );
-
 create table if not exists ripple.quote (
     quoteid SERIAL primary key,
     quote text not null,
@@ -47,7 +44,6 @@ create table if not exists ripple.friend(
     userid2 text references ripple.user(userid) on delete cascade,
     accepted boolean
 );
-
 create table if not exists ripple.recentmsg(
     msgid SERIAL,
     context text,
@@ -56,6 +52,3 @@ create table if not exists ripple.recentmsg(
     userid2 text,
     primary key(userid1,userid2)
 );
-
-
-
