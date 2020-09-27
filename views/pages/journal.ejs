@@ -10,77 +10,141 @@
   </head>
 
   <body>
+    <div id="topofpage"></div>
 
     <h1>Ripple</h1>
     <h3>Journal</h3>
 
 <br><br>
-    <div class="container">
 
-      <div id= "page0" class="jumbotron pages">
-        <h4 class="display-5"><%= rows[0].dt %></h4>
+    <% var today = new Date(); var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate(); %>
 
-        <button class="btn btn-primary forward" type="button" data-next="1" data-current="0"> Next Page</button>
+    <div class="container" style="text-align: center;">
+
+      <div id="0" class="jumbotron pages" style="margin-left: auto; margin-right: auto;">
+
+        <% if(data[0][0].since.toDateString() == today.toDateString()){ %>
+        <h4 id="todaydate" class="display-4">Today: <%= today.toDateString() %></h4>
       
         <hr class="my-4">
 
-        <% if(rows[0].category == "quote"){ %>
+        <% data[0].forEach(function(entry, i){ 
+          if(entry.category == "description"){ %>
+            <div class="descriptor" style="width: 60%;height: 60%; word-wrap: break-word;"><h5>
+              Today I'm Feeling:
+              <small class="text-muted"><%=entry.journal %></small>
+            </h5>
+            </div>
+          <%}
 
-        <blockquote class="blockquote text-center">
-          <p class="mb-0"><%= rows[0].journal %></p>
-          <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
-        </blockquote>
+           else if(entry.category == "quote"){ %>
 
-        <% } %>
+            <blockquote class="blockquote text-center">
+              <cite class="blockquote-footer">"<%= entry.journal %>"</cite>
+            </blockquote>
+        <% } 
+            
+          else if(entry.category == "message"){ %>
+            <div class="messages">
+              <%= entry.journal %>
+            </div>
 
-        <p><%= rows[0].journal %></p>
-
-      </div>
-
-      <div id= "page1" class="jumbotron pages hidden" >
-        <h4 class="display-5"><%= rows[1].dt%></h4>
-      
-        <button class="btn btn-primary forward" type="button" data-next="2" data-current="1"> Next Page</button>
-        <button class="btn btn-primary back" type="button"  data-back="0" data-current="1"> Back</button>
-      
-        <hr class="my-4">
-
-        <% if(rows[0].category == "quote"){ %>
-
-        <blockquote class="blockquote text-center">
-          <p class="mb-0"><%= rows[1].journal %></p>
-          <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
-        </blockquote>
-          
-        <% } %>
+          <%}
+        else{ %>
         
-        <p><%= rows[1].journal %></p> 
+          <p id="todayjournal"><%= entry.journal %></p>
 
-
-      </div>
-
-      <div id= "page2" class="jumbotron pages hidden" >
-        <h4 class="display-5"><%= rows[2].dt %></h4>
-
-        <button class="btn btn-primary back" type="button"  data-back="1" data-current="2"> Back</button>
-      
-        <hr class="my-4">
-
-        <% if(rows[0].category == "quote"){ %>
-
-        <blockquote class="blockquote text-center">
-          <p class="mb-0"><%= rows[2].journal %></p>
-          <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
-        </blockquote>
-          
+          <% }
+          }) 
+        }
+        else{ %>
+        <p id="page0text">You have not entered en entry or bookmarked on this day!</p>
         <% } %>
-        
-        <p><%= rows[2].journal %></p> 
 
+        <button style="margin-left: auto; margin-right: auto;" type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Add Journal Entry</button>
+
+        <div id="modal-entry" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+     
+              <form id="journalentry">
+              <div class="form-group" style="text-align: center;">
+                <label for="journal"><b>Today: <%= today.toDateString() %></b>
+                </label>
+                <textarea id = "userinput" class="form-control" rows="10" name="entry" style="width: 80%; text-align: center; overflow: scroll;" ></textarea>
+                <button id= "entryform" class="btn btn-secondary" data-dismiss="modal">Submit</button>
+              </div>
+            </form>
+     
+            <button class="btn btn-primary" id="top" style="background-color: darkslateblue;bottom: 15px;left: 15px;">Back to Top</button>
+            </div>
+          </div>
+        </div>     
+      
+
+        <% if (size !=0 && size > 1){ %>
+        <button style="float: left;" class="btn btn-primary back" type="button" data-next="1" data-current= "0"> Previous Page</button>
+            <% } %>
+            <button onclick="scrolltotop()" class="btn btn-primary" id="top" style="background-color: darkslateblue;width: 100%;">Back to Top</button>
 
       </div>
-
     </div>
+
+
+
+    <%for(var j =1 ; j< size; j++){ %>
+
+    <div class="container" style="text-align: center;">
+
+      <div id=<%=j %> class="jumbotron pages" style="margin-left: auto; margin-right: auto;">
+
+        <h4 class="display-4"><%= data[j][0].since.toDateString() %></h4>
+      
+        <hr class="my-4">
+
+        <% data[j].forEach(function(page, i){ 
+
+          if(page.category == "description"){ %>
+            <div class="descriptor"><h5>
+              Today I'm Feeling:
+              <small class="text-muted"><%=page.journal %></small>
+            </h5>
+          </div>
+          <%}
+
+          else if(page.category == "quote"){ %>
+
+            <blockquote class="blockquote text-center">
+              <cite class="blockquote-footer">"<%= page.journal %>"</cite>
+            </blockquote>
+          <% } 
+          
+          else if(entry.category == "message"){ %>
+            <div class="messages">
+              <%= entry.journal %>
+            </div>
+
+          <%}
+        
+        else{ %>
+        
+          <p id=<%=j%>><%= page.journal %></p>
+
+          <% }
+          }) 
+
+          if (data[j+1]){ %>
+        <button style="float: left;" class="btn btn-primary back" type="button" data-next="<%= j+1 %>" data-current=<%=j %>> Previous Page</button>
+            <% } 
+
+        if (data[j-1]){ %>
+        <button style="float: right;" class="btn btn-primary forward" type="button" data-back="<%= j-1 %>" data-current=<%= j %>> Next Page</button>
+          <% } %>
+          <button onclick="scrolltotop()" class="btn btn-primary" id="top" style="background-color: darkslateblue;">Back to Top</button>
+      </div>
+    <% }; %>
+
+
 
 
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -88,46 +152,77 @@
       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 
       <script>
-        function flip(curr, next){
-          console.log("here")
-          $("#page"+curr).animate({left: '-150%'}, 500, function() {
+        function flipnext(curr, next){
+          console.log("flip next" + curr + next)
+          $("#"+curr).animate({left: '-150%'}, 500, function() {
             $(this).hide();
-            $("#page"+next).removeClass('hidden').animate({left: '20%'},200, function(){}).show();
+            $("#"+next).removeClass('hidden').animate({left: '20%'},200, function(){}).show();
           })
         };
 
         function flipBack(curr, prev){
-          console.log("here")
-          $("#page"+curr).animate({left: '-150%'}, 500, function() {
+          console.log("flipback" + curr + prev)
+          $("#"+curr).animate({left: '-150%'}, 500, function() {
             $(this).hide();
-            $("#page"+prev).removeClass('hidden').animate({left: '20%'},200, function(){}).show();
+            $("#"+prev).removeClass('hidden').animate({left: '20%'},200, function(){}).show();
           })
         };
-        			  
-        $(document).ready(function() { // Modified code from http://jsfiddle.net/ksparakis/wgwbq/
+    
+      function scrolltotop(){
+        console.log('clicked')
+      $('html, body').animate({
+          scrollTop: $('#topofpage').offset().top
+      }, 1000);
+      };
+                  
+        $(document).ready(function() { 
           
-          var numpages = 3;
+          var numpages= document.getElementsByClassName('jumbotron').length
+          console.log(numpages)
           var start = 0;
   
           for(var i=0;i < numpages;i++)
           {
-            var page = "#page"+i;
+            var page = "#"+i;
 
             if(i != start){
               $(page).hide(); 
             }
           }
 
+        // Modified code from http://jsfiddle.net/ksparakis/wgwbq/
           $('.forward').click(function() {
-            flip($(this).data('current'), $(this).data('next'));
+            flipnext($(this).data('current'), $(this).data('back'));
           });
           
           $('.back').click(function() {
-            flipBack($(this).data('current'), $(this).data('back'));
+            flipBack($(this).data('current'), $(this).data('next'));
           });
 
 
+      $("#entryform").on('click', function(e) {
+
+        e.preventDefault();
+        var entry = $('#userinput').val()
+        var currpage = $()
+
+        $.ajax({
+            url: "/entry",
+            type: "POST",
+            data: {content: entry},
+
+            success: function(data){
+                $("#page0text").append(entry)
+                $(".jumbotron-fluid").remove()
+                location.reload()
+
+            }
         });
+    });
+
+  });
+
+        
 
   
         </script>
