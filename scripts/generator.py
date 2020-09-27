@@ -14,7 +14,7 @@ def generateData(num):
             # create user
             username = '\'{username}_{random}\''.format(username=np.random.choice(usernames), random=np.random.randint(1000))
             age = np.random.randint(50)
-            cmd = 'INSERT INTO ripple.user (username, age) VALUES ({username}, {age});\n'.format(username=username, age=age)
+            cmd = 'INSERT INTO ripple.user (userid, age) VALUES ({username}, {age});\n'.format(username=username, age=age)
             f.write(cmd)
 
             # create description
@@ -23,10 +23,10 @@ def generateData(num):
             for i in indices:
                 description[i] = np.random.choice(words)
             description = ' '.join(description).replace('\'', '\'\'')
-            cmd = 'INSERT INTO ripple.description (description, userid) VALUES (\'{description}\', {userid});\n'.format(description=description, userid=username)
+            cmd = 'INSERT INTO ripple.description (content, userid) VALUES (\'{description}\', {userid});\n'.format(description=description, userid=username)
             f.write(cmd)
 
         f.close()
 
 
-generateData(100)
+generateData(20)
