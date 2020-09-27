@@ -10,7 +10,20 @@
 <!-- Desciption and journal databases should have these values inserted -->
     
 
-    <!-- <button onclick="getquote()">get a quote</button> -->
+    <button onclick="getquote()">get a quote</button>
+    <div class="row padding">
+        <div class="col-sm-12 col-md-6 col-lg-3">
+          <div class="card">
+            <img class="card-img-top" id="img1" src="" alt="">
+            <div class="card-body">
+                <div>
+                    <h5 class="card-title" id="title1"></h5>
+                    <p id="author"></p>
+                    <button class="btn btn-success btn-small">Favorite</button>
+                </div>
+            </div>
+          </div>
+        </div>
     <br>
     <br>
     <br>
@@ -25,29 +38,25 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 
  <!-- description, quote, journal  -->
-  <!-- <script>
+  <script>
     function getquote(){
-      const proxyurl = "https://cors-anywhere.herokuapp.com/";
-      const url = "https://kutip.p.rapidapi.com/api/quote/random?lang=en";
-      fetch(proxyurl + url, {
-      "method": "GET",
-      "headers": {
-        "x-rapidapi-host": "kutip.p.rapidapi.com",
-        "x-rapidapi-key": "3d472a9dffmsh9ea75918f79cb77p1d7753jsn38591ef6ad75"
-      }
-    })
-    .then(response => {
-      console.log(response);
-    })
-    .catch(err => {
-      console.log(err);
-    });
+        fetch("https://type.fit/api/quotes")
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            console.log(data);
+            var ran_quote = Math.floor(Math.random() * 1600);
+            console.log("This is the random number", ran_quote);    
+            document.getElementById("title1").innerHTML = data[ran_quote].text;
+            document.getElementById("author").innerHTML = data[ran_quote].author;
+        });
 
 
     }
 
 
-  </script> -->
+  </script>
 <script type="text/javascript" src="homepage.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 </body>
