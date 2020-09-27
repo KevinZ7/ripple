@@ -13,10 +13,10 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 # change here
 DATABASE_URL = 'localhost'
-PORT = 5432
-DATABASE = 'ripple'
-USER = 'fliang'
-PASSWORD = ''
+PORT = 5000
+DATABASE = 'postgres'
+USER = 'postgres'
+PASSWORD = 'root'
 
 def myArgsParse():
     parser = argparse.ArgumentParser(description='Create a list of recommended friends')
