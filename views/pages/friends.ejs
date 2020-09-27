@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./stylesheets/friends.css">
+    <title>Friends</title>
+</head>
+
+<body>
+
+    <!-- Modal -->
+    <div class="modal fade" id="recipeModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content overflow-auto" style="height: 90vh;"> 
+                <div class="modal-header" style="background-color:#44b687 ;">
+                    <h2 class="modal-title" style="font-weight: bold; color: white;">Johnsmith3's Chat</h2>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid chat-box overflow-auto" style="border-style: solid;border-color: rgb(198, 233, 198);border-width: 1px;">
+                        
+                    </div>
+
+                    <div class='form-group send-message-section mt-4'>
+                        <textarea class="form-control send-message-content" rows = "4" placeholder="Enter your message here..."></textarea>
+                        <button class="btn btn-success mt-1 float-right send-message-button" data-userid='johnsmith3'>Send</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class='container justify-content-center'>
+        <div class="friend-list-title text-center">
+            Friend List
+        </div>
+        <div class="friend-list-box overflow-auto">
+
+            <%requests.forEach(element => { %>
+                <div class="chat_list active friendRequest">
+                    <div class="chat_people">
+                        <div class="btn btn-danger float-right declineFriend" data-userid=<%=element%>>Decline</div>
+                        <div class="btn btn-success float-right acceptFriend mr-2" data-userid=<%=element%>>Accept</div>
+                        <div class="font-weight-bold">Friend Request:</div>
+                        <div><%=element%></div>
+                      </div>
+                </div>
+            <% })%>
+
+            <%real.forEach(element => { %>
+                <div class="btn chat_list active text-left realFriend" style="width: 100%;" data-userid=<%=element.name%>>
+                    <div class="chat_people">
+                        <div class="chat_ib">
+                            <div class="font-weight-bold"><%=element.name%></div>
+                            
+                            <div style="font-size: x-small;"><%=element.date%></div>
+                            <div class="chat-content">
+                                <%=element.message%>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            <% })%>
+        </div>
+
+        
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="friends.js"></script>
+</body>
+</html>
