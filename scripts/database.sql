@@ -12,7 +12,9 @@ create table if not exists ripple.user (
 create table if not exists ripple.description (
     descid SERIAL primary key,
     content text not null,
-    userid text references ripple.user(userid) on delete cascade
+    since TIMESTAMP NOT null,
+    userid text references ripple.user(userid) on delete cascade,
+    unique (userid)
 );
 create table if not exists ripple.quote (
     quoteid SERIAL primary key,

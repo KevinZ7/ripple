@@ -8,21 +8,24 @@
 
 <body>
 <!-- Desciption and journal databases should have these values inserted -->
-    <li><%= data %></li>
+    
 
-    <button onclick="getquote()">get a quote</button>
+    <!-- <button onclick="getquote()">get a quote</button> -->
     <br>
     <br>
     <br>
-    <form action="/add_mess", method="POST">
-      <div class="form-group col-md-6">
-        <label for="message" style="font-size: large;">How are you feeling?:</label>
-        <textarea class="form-control" rows="10" id="message"></textarea>
-        <input style="position: relative; left: 870px; top: 20px;" type="submit" class="btn btn-primary btn-lg" name = "sub" value="Sign Up">
-      </div>
-    </form>
+    <div class="form-group col-md-6">
+        <label for="message" style="font-size: large; font-weight: bold;">How are you feeling?</label>
+        <textarea class="form-control" rows="10" id="message" name="message"></textarea>
+        <input onclick = "sub_handle()"id = "sub" style="position: relative; left: 570px; top: 20px;" type="button" class="btn btn-primary btn-lg"value="Find a Match"/>
+    </div>
 
-  <script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+ <!-- description, quote, journal  -->
+  <!-- <script>
     function getquote(){
       const proxyurl = "https://cors-anywhere.herokuapp.com/";
       const url = "https://kutip.p.rapidapi.com/api/quote/random?lang=en";
@@ -44,8 +47,8 @@
     }
 
 
-  </script>
-
+  </script> -->
+<script type="text/javascript" src="homepage.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 </body>
 </html>
