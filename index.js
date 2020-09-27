@@ -57,7 +57,7 @@ app.post('/add_mess', (req,res)=>{
   var content = req.body.message;
   console.log(content);
   // var username = req.session.user.username;
-  var username = 'Lily_693';
+  var username = 'Lily_236';
   var category = 'description';
 
 
@@ -86,7 +86,7 @@ app.post('/add_mess', (req,res)=>{
 })
 
 app.get('/potentialfriends', (req, res) => {
-  let username = 'Lily_693';
+  let username = 'Lily_236';
   let dataToSend;
   const python = spawn('python', ['scripts/nlp/comparison.py', '-u', username]);
   console.log(username)
@@ -98,8 +98,8 @@ app.get('/potentialfriends', (req, res) => {
   python.on('close', (code) => {
     console.log(`child process close all stdio with code ${code}`);
     // send data to browser
-    console.log(dataToSend)
-    res.send({friends: dataToSend})
+    console.log(JSON.parse(dataToSend))
+    res.send({friends: JSON.parse(dataToSend)})
   });
 })
 
