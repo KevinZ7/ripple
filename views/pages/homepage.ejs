@@ -10,49 +10,32 @@
 <body onload="getquote()">
 <!-- Desciption and journal databases should have these values inserted -->
     
-<!-- Start for quotes -->
-    <div class = "container-fluid">
-        <div class="row padding">
-            <div class="col-sm-12 col-md-6 col-lg-3">
-            <div class="card" style="border-width: thick;">
-                <img class="card-img-top" id="img1" src="" alt="">
-                <div class="card-body">
-                    <div>
-                        <h5 class="card-title" id="title1"></h5>
-                        <p id="author1"></p>
-                        <button id = "1" onclick="quote_handler(id)" class="btn btn-success btn-small">Favorite</button>
-                    </div>
-                </div>
-            </div>
-            </div>
-        <div class="row padding">
-            <div class="col-sm-12 col-md-6 col-lg-3"style="position: relative; left: 100px; bottom: 20px;">
-                <div class="card"style="border-width: thick;">
-                <img class="card-img-top" id="img1" src="" alt="">
-                <div class="card-body">
-                    <div>
-                        <h5 class="card-title" id="title2"></h5>
-                        <p id="author2"></p>
-                        <button id = "2" onclick="quote_handler(id)" class="btn btn-success btn-small">Favorite</button>
-                    </div>
-                </div>
-                </div>
-            </div>        
-
-            <!-- <div class="row padding">
-                <div class="col-sm-12 col-md-6 col-lg-3"style="position: relative; left: 200px;">
-                    <div class="card" style="border-width: thick;">
-                    <img class="card-img-top" id="img1" src="" alt="">
-                    <div class="card-body">
-                        <div>
-                            <h5 class="card-title" id="title3"></h5>
-                            <p id="author3"></p>
-                            <button id = "3" onclick="quote_handler(id)" class="btn btn-success btn-small">Favorite</button>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-        </div> -->
+<div class = "container-fluid">
+  <div class="row padding">
+      <div class="card" style="border-width: thick;">
+          <img class="card-img-top" id="img1" src="" alt=""/>
+          <div class="card-body">
+              <div>
+                  <h5 class="card-title" id="title1"></h5>
+                  <p id="author1"></p>
+                  <button id = "1" onclick="quote_handler(id)" class="btn btn-success btn-small">Favorite</button>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="row padding" style="position: relative; left: 570px; bottom: 20px;">
+      <div class="card" style="border-width: thick;">
+          <img class="card-img-top" id="img1" src="" alt=""/>
+          <div class="card-body">
+              <div>
+                  <h5 class="card-title" id="title2"></h5>
+                  <p id="author2"></p>
+                  <button id = "1" onclick="quote_handler(id)" class="btn btn-success btn-small">Favorite</button>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
 
     <br>
     <br>
@@ -60,7 +43,7 @@
     <br>
     <br>
     <br>
-    <div class="form-group col-md-6"style="position: relative; left: -580px; top: 300px;">
+    <div class="form-group col-md-6">
         <label for="message" style="font-size: large; font-weight: bold;">How are you feeling?</label>
         <textarea class="form-control" rows="10" id="message" name="message"></textarea>
         <input onclick = "sub_handle()"id = "sub" style="position: relative; left: 570px; top: 20px;" type="button" class="btn btn-primary btn-lg"value="Find a Match"/>
