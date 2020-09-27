@@ -6,6 +6,7 @@ drop table if exists ripple.journal;
 drop table if exists ripple.quote;
 drop table if exists ripple.description;
 drop table if exists ripple.user;
+drop table if exists ripple.recentmsg;
 
 create table if not exists ripple.user (
     userid text primary key,
@@ -47,6 +48,15 @@ create table if not exists ripple.friend(
     userid1 text references ripple.user(userid) on delete cascade,
     userid2 text references ripple.user(userid) on delete cascade,
     accepted boolean
+);
+
+create table if not exists ripple.recentmsg(
+    msgid SERIAL,
+    context text,
+    since TIMESTAMP not null,
+    userid1 text,
+    userid2 text,
+    primary key(userid1,userid2)
 );
 
 

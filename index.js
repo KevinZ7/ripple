@@ -70,7 +70,7 @@ app.post('/sendMessage',(req,res) => {
   var content = req.body.message;
 
   var sendMessageQUery = 'INSERT INTO ripple.message (userid1,userid2,since,msg,checked) VALUES ($1,$2,NOW()::TIMESTAMP,$3,$4)';
-  var sendRecentMessageQuery = 'INSERT INTO ripple.recentmsg (content,since,userid1,userid2) VALUES ($1,NOW()::TIMESTAMP,$2,$3) ON CONFLICT (userid1,userid2) DO UPDATE SET content = $4';
+  var sendRecentMessageQuery = 'INSERT INTO ripple.recentmsg (context,since,userid1,userid2) VALUES ($1,NOW()::TIMESTAMP,$2,$3) ON CONFLICT (userid1,userid2) DO UPDATE SET context = $4';
 
   pool.query(sendMessageQUery,[username,friendName,content,false],(error,results) => {
     if(error){
@@ -81,13 +81,15 @@ app.post('/sendMessage',(req,res) => {
 
     pool.query(sendRecentMessageQuery,[content,username,friendName,content],(error,results2) => {
       if(error){
-        console.log("send recentmsg error!");
+        console.log(error)
+        console.log("send recentmsg1 error!");
         res.status(401);
       }
 
       pool.query(sendRecentMessageQuery,[content,friendName,username,content],(error,results3) => {
         if(error){
-          console.log("send recentmsg error!");
+          console.log(error)
+          console.log("send recentmsg2 error!");
           res.status(401);
         }
         
@@ -102,7 +104,7 @@ app.get('/getMessage',(req,res) => {
   var username = req.session.user.username;
   var friendname = req.query.friendname;
 
-  console.log(friendname);
+  // console.log(friendname);
 
   var getMessageQuery = 'SELECT * from ripple.message where (userid1 = $1 and userid2 = $2) or (userid2 = $1 and userid1 = $2) order BY Since DESC'
 
@@ -182,23 +184,34 @@ app.get('/friends',(req,res) => {
         res.status(401);
       }
 
-      if(results2.rows.length == 0){
-        realFriends.forEach(element=>{
-          element.message = '';
-        })
-      } 
-      else{
-        var date = {}
-        var messages ={}
-        results2.rows.forEach(ele => {
-          messages[ele.userid2] = ele.content;
-          date[ele.userid2] = ele.since;
-        })
-        realFriends.forEach(elem => {
+      // console.log(results2.rows)
+     
+      realFriends.forEach(element=>{
+        element.message = '';
+        element.date = '';
+      })
+
+      // console.log(realFriends)
+
+    
+      var date = {}
+      var messages ={}
+
+      results2.rows.forEach(ele => {
+        messages[ele.userid2] = ele.context;
+        date[ele.userid2] = ele.since;
+      })
+
+      // console.log(date)
+      // console.log(messages)
+      realFriends.forEach(elem => {
+        if(messages[elem.name]){
           elem.message = messages[elem.name];
           elem.date = date[elem.name];
-        })
-      }
+        }
+      })
+      
+      // console.log(realFriends)
       res.render('pages/friends',{
         real: realFriends,
         requests: friendRequests,
@@ -211,6 +224,38 @@ app.get('/friends',(req,res) => {
 
   
 
+})
+
+//route for accepting friend requests
+app.post('/acceptFriend',(req,res) => {
+  // console.log("in route")
+  var username = req.session.user.username
+  var friendname = req.body.friendname
+
+  var friendRequestUpdateQuery = 'update ripple.friend set accepted = $1 where userid1 = $2 and userid2 = $3'
+  pool.query(friendRequestUpdateQuery,[true,friendname,username],(error,results) => {
+    if(error){
+      console.log("accept friend error");
+      res.status(401);
+    }
+    res.send("success");
+  })
+})
+
+//route for declining friend requests
+app.post('/declineFriend',(req,res) => {
+  console.log("in route")
+  var username = req.session.user.username
+  var friendname = req.body.friendname
+
+  var friendRequestUpdateQuery = 'DELETE FROM ripple.friend where (userid1 = $1 and userid2 = $2) or (userid1 = $2 and userid2 = $1)'
+  pool.query(friendRequestUpdateQuery,[friendname,username],(error,results) => {
+    if(error){
+      console.log("decline friend error");
+      res.status(401);
+    }
+    res.send("success");
+  })
 })
 
 http.listen(PORT,() => console.log(`Listening on ${ PORT }`));

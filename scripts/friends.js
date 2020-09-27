@@ -24,6 +24,29 @@ $(document).ready(function(){
 
     })
 
+    $('.friend-list-box').on('click','div.acceptFriend',function(){
+        $.post('/acceptFriend',{
+            friendname: $(this).attr('data-userid')
+        },function(){
+            console.log('finished')
+            location.reload()
+        })
+    })
+
+    $('.friend-list-box').on('click','div.declineFriend',function(){
+        console.log("clicked!")
+        $.post('/declineFriend',{
+            friendname: $(this).attr('data-userid')
+        },function(){
+            console.log('finished')
+            location.reload()
+        })
+    })
+
+    $('.close').on('click',function(){
+        location.reload()
+    })
+
     $('.send-message-button').on('click',sendMessage)
 })
 

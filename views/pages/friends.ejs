@@ -20,6 +20,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="container-fluid chat-box overflow-auto" style="border-style: solid;border-color: rgb(198, 233, 198);border-width: 1px;">
+                        
                     </div>
 
                     <div class='form-group send-message-section mt-4'>
@@ -41,8 +42,8 @@
             <%requests.forEach(element => { %>
                 <div class="chat_list active friendRequest">
                     <div class="chat_people">
-                        <div class="btn btn-danger float-right acceptFriend" data-userid=<%=element%>>Decline</div>
-                        <div class="btn btn-success float-right declineFriend mr-2" data-userid=<%=element%>>Accept</div>
+                        <div class="btn btn-danger float-right declineFriend" data-userid=<%=element%>>Decline</div>
+                        <div class="btn btn-success float-right acceptFriend mr-2" data-userid=<%=element%>>Accept</div>
                         <div class="font-weight-bold">Friend Request:</div>
                         <div><%=element%></div>
                       </div>
@@ -54,10 +55,12 @@
                     <div class="chat_people">
                         <div class="chat_ib">
                             <div class="font-weight-bold"><%=element.name%></div>
-                            <div style="font-size: x-small;"><%=element.date.toDateString()%></div>
+                            
+                            <div style="font-size: x-small;"><%=element.date%></div>
                             <div class="chat-content">
                                 <%=element.message%>
                             </div>
+                            
                         </div>
                     </div>
                 </div>
