@@ -1,0 +1,67 @@
+body{
+    background-color: #44b687
+}
+
+.container{
+    width: 60%;
+    background-color: #b5ead7;
+    padding: 10px;
+    border-radius: 5px;
+    height: 80vh;
+    margin-top: 70px;
+}
+
+.friend-list-title{
+    font-size: xx-large;
+    color: #44b687;
+}
+
+.friend-list-box{
+    height: 80%;
+    background-color: white
+}
+
+.chat_list.active{
+    border-color: #b5ead7;
+    border-style: solid;
+    border-width: 2px;
+    margin: 1px;
+    border-radius: 10px;
+    padding-right: 30px;
+    padding-left: 30px;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    overflow: hidden;
+    height: 100px;
+}
+
+.chat_list{
+    border-color: lightgray;
+    border-style: solid;
+    border-width: 2px;
+    margin: 1px;
+    border-radius: 10px;
+    padding-right: 30px;
+    padding-left: 30px;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    overflow: hidden;
+    height: 100px;
+}
+.chat-content{
+    padding-bottom: 20px;
+}
+
+.general-information{
+    border: 1px solid lightgrey;
+    border-radius: 5%;
+}
+
+.ingredients-container{
+    /* border: 1px solid lightgrey; */
+    border-radius: 5%;    
+}
+
+.finished{
+    background-color:lightgreen;
+}

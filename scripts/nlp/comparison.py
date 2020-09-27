@@ -1,15 +1,78 @@
 import pandas as pd
 import numpy as np
 import nltk
+import argparse
+import os
+import psycopg2
+import sys
 from sklearn.metrics.pairwise import cosine_similarity
 from scipy import sparse
 from nltk.corpus import stopwords
 from nltk.stem.snowball import SnowballStemmer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-def formatData():
-    df = pd.read_csv('raw_data.tsv', sep='\t')
+# change here
+DATABASE_URL = 'localhost'
+PORT = 5000
+DATABASE = 'postgres'
+USER = 'postgres'
+PASSWORD = 'root'
 
+def myArgsParse():
+    parser = argparse.ArgumentParser(description='Create a list of recommended friends')
+    parser.add_argument('-u', dest='username', action='store',
+                        help='the username to find friends for')
+
+    args = parser.parse_args()
+    return args
+
+def getData(args):
+    dataDf = None
+    try:
+        conn = psycopg2.connect(
+            host=DATABASE_URL,
+            database=DATABASE,
+            user=USER,
+            password=PASSWORD)
+        
+        cursor = conn.cursor()
+        cursor.execute('''
+        (SELECT
+            d.userid,
+            d.content,
+            f.userid1,
+            f.userid2
+        FROM ripple.description as d
+        LEFT JOIN ripple.friend as f
+        ON d.userid = f.userid1)
+        UNION
+        (SELECT
+            d.userid, 
+            d.content,
+            f.userid1,
+            f.userid2
+        FROM ripple.description as d
+        LEFT JOIN ripple.friend as f
+        ON d.userid = f.userid2);
+        ''')
+        dataDf = pd.DataFrame(cursor.fetchall(), columns=['userid', 'content', 'userid1', 'userid2'])
+        dataDf = dataDf.drop_duplicates()
+        dataDf = dataDf[(dataDf.userid1 != args.username) & (dataDf.userid2 != args.username)]
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
+        return dataDf
+
+def formatData(args, df):
+    # if the input dataframe has no data, return
+    if df is None:
+        return
+    
+    # get index of user
+    index = df[df.userid == args.username].index[0]
+    
     # remove puntuation
     df['content'] = df['content'].str.replace('[^\w\s]','')
 
@@ -32,38 +95,33 @@ def formatData():
 
     # compute cosine similarity
     similarities = cosine_similarity(featureVectors)
-    print(similarities)
 
-    numTopSuggestedFriends = 3
     # to account for the person themselves
-    numTopSuggestedFriends += 1
+    NUM_TOP_SUGGESTED_FRIENDS = 4
+    NUM_TOP_SUGGESTED_FRIENDS += 1
 
     threshold = 0.2
-    # output data
-    with open('output.txt', 'w') as f:
-        matrixLen = len(similarities)
-        if (matrixLen > 0):
-            for i in range(matrixLen):
-                # find the top n suggested friends
-                ind = np.argpartition(similarities[i], -numTopSuggestedFriends)[-numTopSuggestedFriends:]
-                
-                # output suggested friends into output file
-                f.write('{content}\n'.format(content=df.iloc[i]['content']))
-                for j in ind[ind != i]:
-                    score = similarities[i][j]
-                    if score >= threshold:
-                        f.write('{score} | {content}'.format(score=similarities[i][j], content=df.iloc[j]['content']))
-                f.write('\n\n')
-        f.close()         
+    indicies = np.argpartition(similarities[index], -NUM_TOP_SUGGESTED_FRIENDS)[-NUM_TOP_SUGGESTED_FRIENDS:]
+    
+    # remove the original user
+    indicies = indicies[indicies != index]
+    
+    potentialFriends = df.iloc[indicies]
+    potentialFriends = potentialFriends[['userid', 'content']]
+    result = potentialFriends.to_json(orient="records")
+    print(result)
 
-if __name__ == '__main__':
-    # install nltk packages
-    try:
-        nltk.data.find('tokenizers/punkt')
-    except LookupError:
-        nltk.download('punkt')
-    try:
-        nltk.data.find('corpora/stopwords')
-    except LookupError:
-        nltk.download('stopwords')
-    formatData()
+
+# install nltk packages
+try:
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    nltk.download('punkt')
+try:
+    nltk.data.find('corpora/stopwords')
+except LookupError:
+    nltk.download('stopwords')
+
+args = myArgsParse()
+dataDf = getData(args)
+formatData(args, dataDf)
