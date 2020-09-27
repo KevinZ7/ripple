@@ -84,6 +84,28 @@ app.post('/add_mess', (req,res)=>{
 
   })
 })
+// to push up the quotes to the database 
+app.post('/insert_quote', (req,res)=>{
+    var author = req.body.author;
+    var quote = req.body.quote;
+    // var username = req.session.user.username;
+    var username = 'abhopla';
+
+    console.log(author);
+    console.log(quote);
+    quote_params = [quote, author,username];
+
+    var quote_query = `INSERT INTO ripple.quote(quote,author,since,userid) VALUES($1,$2,current_timestamp,$3)`;
+    
+    pool.query(quote_query,quote_params,(error,resp)=>{
+      if (error){ console.log(error); return res.status(409).send(error);}
+      res.sendStatus(200);
+    })
+
+})
+
+
+
 app.get('/potentialfriends', (req, res) => {
   let username = req.query.username;
   let dataToSend;

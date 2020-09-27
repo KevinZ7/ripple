@@ -6,24 +6,54 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 <h1> Ripple</h1>
 
-<body>
+<body onload="getquote()">
 <!-- Desciption and journal databases should have these values inserted -->
     
-
-    <button onclick="getquote()">get a quote</button>
+<!-- Start for quotes -->
     <div class="row padding">
-        <div class="col-sm-12 col-md-6 col-lg-3">
+        <div class="col-sm-12 col-md-6 col-lg-3"style="position:">
           <div class="card">
             <img class="card-img-top" id="img1" src="" alt="">
             <div class="card-body">
                 <div>
                     <h5 class="card-title" id="title1"></h5>
-                    <p id="author"></p>
-                    <button class="btn btn-success btn-small">Favorite</button>
+                    <p id="author1"></p>
+                    <button id = "1" onclick="quote_handler(id)" class="btn btn-success btn-small">Favorite</button>
                 </div>
             </div>
           </div>
         </div>
+    <div class="row padding">
+        <div class="col-sm-12 col-md-6 col-lg-3">
+            <div class="card">
+            <img class="card-img-top" id="img1" src="" alt="">
+            <div class="card-body">
+                <div>
+                    <h5 class="card-title" id="title2"></h5>
+                    <p id="author2"></p>
+                    <button id = "2" onclick="quote_handler(id)" class="btn btn-success btn-small">Favorite</button>
+                </div>
+            </div>
+            </div>
+        </div>        
+
+        <div class="row padding">
+            <div class="col-sm-12 col-md-6 col-lg-3">
+                <div class="card">
+                <img class="card-img-top" id="img1" src="" alt="">
+                <div class="card-body">
+                    <div>
+                        <h5 class="card-title" id="title3"></h5>
+                        <p id="author3"></p>
+                        <button id = "3" onclick="quote_handler(id)" class="btn btn-success btn-small">Favorite</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+    <br>
+    <br>
+    <br>
     <br>
     <br>
     <br>
@@ -49,9 +79,15 @@
             var ran_quote = Math.floor(Math.random() * 1600);
             console.log("This is the random number", ran_quote);    
             document.getElementById("title1").innerHTML = data[ran_quote].text;
-            document.getElementById("author").innerHTML = data[ran_quote].author;
-        });
+            document.getElementById("author1").innerHTML = data[ran_quote].author;
+            ran_quote = Math.floor(Math.random() * 1600);
+            document.getElementById("title2").innerHTML = data[ran_quote].text;
+            document.getElementById("author2").innerHTML = data[ran_quote].author;
+            ran_quote = Math.floor(Math.random() * 1600);
+            document.getElementById("title3").innerHTML = data[ran_quote].text;
+            document.getElementById("author3").innerHTML = data[ran_quote].author;
 
+        });
 
     }
 
