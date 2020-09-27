@@ -1,4 +1,5 @@
 const express = require('express')
+const {spawn} = require('child_process');
 const path = require('path')
 const PORT = process.env.PORT || 5000
 const {Pool} = require('pg');
@@ -27,6 +28,25 @@ app.use(session({
 //section for all get post routes
 app.get('/',(req,res) =>  {
   res.render('pages/index')
+})
+
+// Route to go to user's journal
+app.get('/journal', (req, res) => {
+  var user = 'johnsmith';
+
+  var query = `SELECT * FROM ripple.journal WHERE userid = '${user}' ORDER BY dt`;
+  pool.query(query, (error, result) => {
+    if(error){
+      console.log(error);
+      res.status(400);
+    }
+
+    var totalrows = result.rows.length;
+    console.log(result.rows[0])
+  
+    res.render('pages/journal',{rows: result.rows, size: totalrows});
+
+  })
 })
 
 app.get('/homepage', (req,res)=>{
@@ -64,6 +84,19 @@ app.post('/add_mess', (req,res)=>{
 
   })
 })
+app.get('/potentialfriends', (req, res) => {
+  let username = req.query.username;
+  let dataToSend;
+  const python = spawn('python', ['scripts/nlp/comparison.py', '-u', username]);
+  python.stdout.on('data', (data) => {
+    console.log('Pipe data from python script ...');
+    dataToSend = data.toString();
+  });
+  python.on('close', (code) => {
+    console.log(`child process close all stdio with code ${code}`);
+    // send data to browser
+    res.send(dataToSend)
+  });
+})
 
 http.listen(PORT,() => console.log(`Listening on ${ PORT }`));
-
