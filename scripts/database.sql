@@ -37,3 +37,9 @@ create table if not exists ripple.friend(
 );
 
 alter table if exists ripple.journal add category text;
+
+alter table if exists ripple.message add cleared boolean;
+
+alter table if exists ripple.message add since date not null;
+
+alter table if exists ripple.message alter column since set DEAFULT CURRENT_DATE;
