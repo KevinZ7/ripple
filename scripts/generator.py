@@ -23,7 +23,7 @@ def generateData(num):
             for i in indices:
                 description[i] = np.random.choice(words)
             description = ' '.join(description).replace('\'', '\'\'')
-            cmd = 'INSERT INTO ripple.description (content, userid) VALUES (\'{description}\', {userid});\n'.format(description=description, userid=username)
+            cmd = 'INSERT INTO ripple.description (content, since, userid) VALUES (\'{description}\', \'2020-09-26\', {userid});\n'.format(description=description, userid=username)
             f.write(cmd)
 
         f.close()

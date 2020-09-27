@@ -8,7 +8,17 @@ function sub_handle(){
         data: { message: content},  // data to submit
         success: function (data, status, xhr) {
             $('p').append('status: ' + status + ', data: ' + data);
-            
+            $.ajax('/potentialfriends', {
+                type: 'GET',
+                success: function (res, err){
+                    console.log(res.friends)
+                    $('#potentialfriends').append('<ol>')
+                    res.friends.split(',').forEach(friend => 
+                        $('#potentialfriends').append(`<li>${friend}</li>`)
+                    );
+                    $('#potentialfriends').append('</ol>')
+                }
+            })
         },
         error: function (jqXhr, textStatus, errorMessage) {
                 $('p').append('Error' + errorMessage);
