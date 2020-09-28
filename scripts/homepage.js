@@ -1,4 +1,14 @@
-
+$(document).ready(function(){
+    $('#friendslist').on('click','button.sendFriendRequest',function(){
+        var friendname = $(this).attr('data-userid')
+        console.log(friendname)
+        $.post('/sendFriendRequest',{
+            friendname:friendname
+        },function(){
+            
+        })
+    })
+})
 
 function sub_handle(){
     var content = document.getElementById("message").value;
@@ -20,7 +30,7 @@ function sub_handle(){
                             <p>
                             ${friend.content}
                             </p>
-                            <button>Add Friend</button>
+                            <button class="sendFriendRequest" data-userid = ${friend.userid}>Add Friend</button>
                         </li>`)
                     );
                     $('#potentialfriends').css('display', 'block');

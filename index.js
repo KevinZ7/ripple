@@ -263,7 +263,7 @@ app.post('/declineFriend',(req,res) => {
 
 // Route to go to user's journal
 app.get('/journal', (req, res) => {
-  var user = 'john';
+  var user = req.session.user.username;
 
 
   var query = `SELECT journal.journal, journal.since, journal.category, quote.author FROM ripple.journal LEFT JOIN ripple.quote
@@ -291,7 +291,9 @@ app.get('/journal', (req, res) => {
 
     var totalrows = entrydate.length;
 
+
     console.log(entrydate)
+    console.log(totalrows)
 
 
     res.render('pages/journal',{data: entrydate, size: totalrows, username: user});
@@ -301,7 +303,7 @@ app.get('/journal', (req, res) => {
 
 app.post('/entry', (req,res) =>{
   var text = req.body.content;
-  var user = 'john';
+  var user = req.session.user.username;
 
   console.log(text)
 
@@ -325,8 +327,8 @@ app.get('/homepage', (req,res)=>{
 app.post('/add_mess', (req,res)=>{
   var content = req.body.message;
   console.log(content);
-  // var username = req.session.user.username;
-  var username = 'Lily_236';
+  var username = req.session.user.username;
+  // var username = 'Lily_236';
   var category = 'description';
 
 
@@ -376,7 +378,7 @@ app.post('/insert_quote', (req,res)=>{
 
 
 app.get('/potentialfriends', (req, res) => {
-  let username = 'Lily_236';
+  let username = req.session.user.username;
   let dataToSend;
   const python = spawn('python3', ['scripts/nlp/comparison.py', '-u', username]);
   console.log(username)
@@ -391,10 +393,21 @@ app.get('/potentialfriends', (req, res) => {
   python.on('close', (code) => {
     console.log(`child process close all stdio with code ${code}`);
     // send data to browser
-    console.log(JSON.parse(dataToSend))
+    console.log("before sending")
+    console.log(dataToSend)
     res.send({friends: JSON.parse(dataToSend)})
   });
+})
 
+app.post('/sendFriendRequest', (req,res) => {
+  var username = req.session.user.username
+  var friendname = req.body.friendname
+
+  var sendrequestquery = 'INSERT into ripple.friend VALUES ($1,$2,$3)'
+
+  pool.query(sendrequestquery,[username,friendname,false],(error,results) => {
+    res.send("success");
+  })
 
 })
 
